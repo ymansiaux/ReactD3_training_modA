@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>D3 Bar Chart</title>
+
+    <!-- D3.js depuis CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .bar {
+        fill: steelblue;
+      }
+
+      .bar:hover {
+        fill: orange;
+      }
+
+      .axis text {
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Bar Chart avec D3.js</h2>
+    <svg width="500" height="300"></svg>
+
+    <script>
+      const data = [
+        { name: "A", value: 1 },
+        { name: "B", value: 5 },
+        { name: "C", value: 8 },
+        { name: "D", value: 10 },
+      ];
+
+      const svg = d3.select("svg");
+      const width = +svg.attr("width");
+      const height = +svg.attr("height");
+
+      const margin = { top: 20, right: 20, bottom: 40, left: 40 };
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+
+      const chart = svg
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      // Échelle X (catégorielle)
+      const x = d3
+        .scaleBand()
+        .domain(data.map((d) => d.name))
+        .range([0, innerWidth])
+        .padding(0.2);
+
+      // Échelle Y (linéaire)
+      const y = d3
+        .scaleLinear()
+        .domain([0, d3.max(data, (d) => d.value)])
+        .nice()
+        .range([innerHeight, 0]);
+
+      // Axes
+      chart
+        .append("g")
+        .attr("transform", `translate(0,${innerHeight})`)
+        .call(d3.axisBottom(x));
+
+      chart.append("g").call(d3.axisLeft(y));
+
+      // Barres
+      chart
+        .selectAll(".bar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", (d) => x(d.name))
+        .attr("y", (d) => y(d.value))
+        .attr("width", x.bandwidth())
+        .attr("height", (d) => innerHeight - y(d.value));
+    </script>
+  </body>
+</html>

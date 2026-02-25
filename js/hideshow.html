@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <body>
+    <p id="text">
+      Now you see me! Click the button to make me disappear. Click again to
+      bring me back.
+    </p>
+    <button id="btn">Toggle paragraph</button>
+
+    <script>
+      document.getElementById("btn").addEventListener("click", function () {
+        const text = document.getElementById("text");
+        if (text.style.display === "none") {
+          text.style.display = "block";
+        } else {
+          text.style.display = "none";
+        }
+
+        // If text is visible, hide it. If hidden, show it.
+        // Hint: check text.style.display
+      });
+    </script>
+  </body>
+</html>
